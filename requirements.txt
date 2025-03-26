@@ -1,0 +1,13 @@
+Django
+gunicorn
+requests
+python-dotenv
+django-extensions
+django-celery-beat
+celery
+redis
+django-cors-headers
+boto3
+jupyterlab
+python-magic
+google-api-python-client

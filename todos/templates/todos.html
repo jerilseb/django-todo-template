@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #4a6cf7;
+        --primary-hover: #3a57d7;
+        --bg-color: #f5f7fa;
+        --card-bg: #ffffff;
+        --text-color: #333;
+        --text-muted: #6c757d;
+        --border-color: #e9ecef;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .user-name {
+        font-weight: 600;
+      }
+
+      .sign-out {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .sign-out:hover {
+        text-decoration: underline;
+      }
+
+      h1 {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin: 0;
+      }
+
+      .todo-form {
+        display: flex;
+        margin-bottom: 2rem;
+        gap: 1rem;
+      }
+
+      .todo-input {
+        flex-grow: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .todo-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+      }
+
+      .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+        font-weight: 600;
+      }
+
+      .btn:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+      }
+
+      .todo-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .todo-item {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .todo-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .todo-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-grow: 1;
+      }
+
+      .todo-check {
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+        opacity: 0;
+        position: absolute;
+      }
+
+      .todo-check-label {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 2px solid var(--border-color);
+        border-radius: 4px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s;
+      }
+
+      .todo-check:checked + .todo-check-label {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+      }
+
+      .todo-check:checked + .todo-check-label::after {
+        content: '\f00c';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+      }
+
+      .todo-text {
+        font-size: 1rem;
+        margin: 0;
+        transition: text-decoration 0.2s, color 0.2s;
+      }
+
+      .completed .todo-text {
+        text-decoration: line-through;
+        color: var(--text-muted);
+      }
+
+      .todo-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .todo-action {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0.25rem;
+        transition: color 0.2s;
+      }
+
+      .todo-action.delete:hover {
+        color: var(--danger-color);
+      }
+
+      .empty-state {
+        text-align: center;
+        margin-top: 3rem;
+        color: var(--text-muted);
+      }
+
+      .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: var(--border-color);
+      }
+
+      @media (max-width: 600px) {
+        .todo-form {
+          flex-direction: column;
+        }
+        
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>My Todos</h1>
+        <div class="user-info">
+          {% if request.user.is_authenticated %}
+            <img src="{{ request.session.user_data.picture }}" alt="{{ request.user.first_name }}" class="user-avatar">
+            <span class="user-name">{{ request.user.first_name }}</span>
+            <a href="{% url 'sign_out' %}" class="sign-out">Sign Out</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <form action="{% url 'add_todo' %}" method="POST" class="todo-form">
+        {% csrf_token %}
+        <input type="text" name="title" class="todo-input" placeholder="Add a new task..." required>
+        <button type="submit" class="btn">Add Todo</button>
+      </form>
+
+      {% if todos %}
+        <ul class="todo-list">
+          {% for todo in todos %}
+            <li class="todo-item {% if todo.completed %}completed{% endif %}">
+              <div class="todo-content">
+                <form action="{% url 'toggle_todo' todo.id %}" method="POST" style="margin: 0;">
+                  {% csrf_token %}
+                  <input type="checkbox" id="todo-{{ todo.id }}" class="todo-check" {% if todo.completed %}checked{% endif %} onChange="this.form.submit()">
+                  <label for="todo-{{ todo.id }}" class="todo-check-label"></label>
+                </form>
+                <p class="todo-text">{{ todo.title }}</p>
+              </div>
+              <div class="todo-actions">
+                <form action="{% url 'delete_todo' todo.id %}" method="POST" style="margin: 0;">
+                  {% csrf_token %}
+                  <button type="submit" class="todo-action delete" aria-label="Delete">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <p>You have no tasks yet. Add one above!</p>
+        </div>
+      {% endif %}
+    </div>
+  </body>
+</html> 

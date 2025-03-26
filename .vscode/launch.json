@@ -1,0 +1,96 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Django",
+            "consoleTitle": "Django",
+            "presentation": {
+                "hidden": true,
+            },
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "args": [
+                "runserver"
+            ],
+            "django": true,
+            "justMyCode": false
+        },
+        {
+            "name": "Lab",
+            "consoleTitle": "Lab",
+            "presentation": {
+                "hidden": true,
+            },
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/notebooks",
+            "program": "${workspaceFolder}/manage.py",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "env": {
+                "DJANGO_ALLOW_ASYNC_UNSAFE": "true"
+            },
+            "args": [
+                "shell_plus",
+                "--lab"
+            ]
+        },
+        {
+            "name": "Beat",
+            "presentation": {
+                "hidden": true,
+            },
+            "consoleTitle": "Beat",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "-A",
+                "core",
+                "beat",
+                "--loglevel=info",
+            ]
+        },
+        {
+            "name": "Tasks",
+            "presentation": {
+                "hidden": true,
+            },
+            "consoleTitle": "Tasks",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "-A",
+                "core",
+                "worker",
+                "--loglevel=info",
+                "--concurrency=1",
+                "-Q",
+                "primary",
+            ]
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Start All",
+            "configurations": [
+                "Django",
+                // "Lab",
+                // "Beat",
+                // "Tasks"
+            ],
+            "stopAll": true
+        }
+    ]
+}
