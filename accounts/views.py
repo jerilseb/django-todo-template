@@ -7,6 +7,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
+from django.conf import settings
 
 @csrf_exempt
 def sign_in(request):
@@ -25,7 +26,7 @@ def auth_receiver(request):
 
     try:
         user_data = id_token.verify_oauth2_token(
-            token, requests.Request(), os.environ['GOOGLE_OAUTH_CLIENT_ID']
+            token, requests.Request(), settings.GOOGLE_OAUTH_CLIENT_ID
         )
     except ValueError:
         return HttpResponse(status=403)
